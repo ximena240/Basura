@@ -3,21 +3,26 @@ import React from 'react';
 function Presentacion() {
   return (
     <div className='min-h-screen bg-gradient-to-b from-[#4D774E] to-[#164A41] text-white'>
-      <header className=' bg-gray-800 p-4'>
-        <nav className='container mx-auto flex justify-end'>
-          <a href='#' className='ml-6 hover:underline font-medium mb-6 '>Crear cuenta</a>
-          <a href='#' className='ml-6 hover:underline font-medium mb-6'>Iniciar sesión</a>
-        </nav>
-      </header>
+     
+      <div className='flex justify-end p-6'>
+        <button className='bg-[#164A41] text-white text-sm font-medium rounded-full px-6 py-2 mr-4 hover:bg-[#588157]'>Crear cuenta</button>
+        <button className='bg-[#164A41] text-white text-sm font-medium rounded-full px-6 py-2 hover:bg-[#588157]'>Iniciar sesión</button>
+      </div>
 
-      <main className='flex items-center justify-center h-[calc(100vh-64px)]'>
-        <div className='container mx-auto p-4 max-w-2xl'>
-          <h1 className='text-[128px] text-left font-extrabold mb-6 leading-tight'>Residuos <br/>Red</h1>
-          <p className='text-lg mb-20 text-left'>
-            Somos una página web enfocada en la concientización de la gestión de residuos que pueden afectar nuestro entorno.
+      <div className='flex justify-between items-center h-full ml-20 mr-20 relative'>
+      
+        <div className='flex flex-col justify-center items-start'>
+          <h1 className='text-white text-9xl font-extrabold mb-10'>Residuos<br />Red</h1>
+          <p className='text-white text-lg font-normal w-96 mb-'>
+            Somos una pagina web enfocada en la concientización de la gestion de residuos que pueden afectar nuestro entorno.
           </p>
         </div>
-      </main>
+
+      
+        <div className='w-96 h-96 rounded-full bg-white flex items-center justify-center shadow-lg'>
+          <img src='/images/logopedorro.png' alt='logopedorro' className='w-64 h-64 object-contain' />
+        </div>
+      </div>
     </div>
   );
 }

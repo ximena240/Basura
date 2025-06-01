@@ -16,12 +16,12 @@ function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gradient-to-t from-[#4D774E] to-[#9DC88D] font-sans">
+    <div className="flex items-center justify-center h-screen bg-gradient-to-t from-[#4D774E] to-50% to-[#81AB77] font-sans">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-black mb-6 text-center text-gray-800">Iniciar sesión</h2>
+        <h2 className="text-3xl font-black mb-2 text-center text-gray-800">Iniciar sesión</h2>
         <div className="mb-4">
           <input
-            className="shadow appearance-none border rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="w-full bg-[#4D774E] text-white rounded-2xl shadow-lg p-2 mt-4"
             id="username"
             type="text"
             placeholder="Ingresa tu nombre de usuario o correo"
@@ -32,7 +32,7 @@ function Login() {
         <div className="mb-6">
           <div className="relative">
             <input
-              className="shadow appearance-none border rounded-2xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              className="w-full bg-[#4D774E] text-white rounded-2xl shadow-lg p-2 -mt-2"
               id="password"
               type="password"
               placeholder="Ingresa tu contraseña"
@@ -47,13 +47,13 @@ function Login() {
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>} {/* Mostrar el mensaje de error */}
         <div className="flex items-center justify-between">
           <button
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-3xl focus:outline-none focus:shadow-outline"
+            className="bg-[#9DC88D] hover:bg-[#164A41] text-white font-bold py-2 px-4 rounded-3xl focus:outline-none focus:shadow-outline"
             type="button"
             onClick={handleLogin} 
           >
             Iniciar sesión
           </button>
-          <a className="inline-block align-baseline font-bold text-sm text-green-500 hover:text-green-800" href="#">
+          <a className="inline-block align-baseline font-stretch-90% text-sm text-[#050505] hover:text-[#164A41]" href="#">
             ¿Olvidaste tu contraseña?
           </a>
         </div>

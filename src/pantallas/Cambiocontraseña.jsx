@@ -5,19 +5,20 @@ function Cambiocontraseña() {
     <>
       <div className="mb-4">
         <div className="h-screen w-screen bg-gradient-to-t from-[#4D774E] to-[#9DC88D] flex justify-center items-center">
-          <div className="w-1/2 h-1/2 flex flex-col justify-center items-center bg-[#D9D9D9] rounded-lg shadow-lg p-8">
-            <h1 className="text-4xl font-bold text-center  mb-6">Cambio de contraseña</h1>
+          <div className="bg-white p-8 rounded-lg shadow-md w-96">
+            <h1 className="text-4xl font-black text-center text-gray-800 mb-6">Cambio de contraseña</h1>
+            
             <input
               type="password" 
               placeholder="Ingresa tu nueva contraseña"
-              className="bg-[#164A41] text-white rounded-md shadow-md p-2 mb-4 w-full"
+              className="w-full bg-[#4D774E] text-white rounded-2xl shadow-lg p-2 mt-4"
             />
             <input
               type="password" 
               placeholder="Confirmación de la nueva contraseña"
-              className="bg-[#164A41] text-white rounded-md shadow-md p-2 mb-6 w-full"
+              className="w-full bg-[#4D774E] text-white rounded-2xl shadow-lg p-2 mt-4"
             />
-            <button className="bg-[#164A41] text-white rounded-md shadow-md w-[800 px] h-[400 px]">
+            <button className="bg-[#164A41] text-white text-sm font-medium rounded-full px-4 py-2 mr-4 hover:bg-[#588157] mt-4">
               Guardar Contraseña
             </button>
           </div>
