@@ -10,7 +10,6 @@ import Guardados from './pantallas/Guardados';
 import EditarPerfil from './EditarPerfil';
 import Mapacentro from './Mapacentro';
 import Paginaprincipal from './PaginaPrincipal';
-import Historias from './Historias';
 import UserProfile from './UserProfile';
 
 
@@ -28,7 +27,6 @@ function App() {
         <Route path="/ImagePost" element={<ImagePost/>}/>
         <Route path="/Guardados" element={<Guardados/>}/>
         <Route path="/EditarPerfil" element={<EditarPerfil/>}/> 
-        <Route path="/Historias" element={<Historias/>}/> 
         <Route path="/Mapacentro" element={<Mapacentro />} />
         <Route path="/Paginaprincipal" element={<Paginaprincipal />} />
         <Route path="/UserProfile" element={<UserProfile />} />
