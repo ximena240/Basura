@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { HomeIcon, BellIcon, UserIcon, Pencil } from 'lucide-react';
 
 export default function SocialProfileUI() {
   const [isEditing, setIsEditing] = useState(false);
@@ -14,52 +15,24 @@ export default function SocialProfileUI() {
     setProfile({ ...profile, [name]: value });
   };
 
-  const icons = {
-    home: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 9.75L12 3l9 6.75v10.5A2.25 2.25 0 0118.75 24H5.25A2.25 2.25 0 013 20.25V9.75z" />
-      </svg>
-    ),
-    comment: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M21 15a2 2 0 002-2V5a2 2 0 00-2-2H3a2 2 0 00-2 2v8a2 2 0 002 2h4l5 5v-5h9z" />
-      </svg>
-    ),
-    send: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M22 2L11 13" /><path strokeLinecap="round" strokeLinejoin="round" d="M22 2L15 22L11 13L2 9L22 2Z" />
-      </svg>
-    ),
-    bookmark: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M5 3h14a2 2 0 012 2v16l-9-4-9 4V5a2 2 0 012-2z" />
-      </svg>
-    ),
-    pencil: (
-      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 20h9" /><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4 12.5-12.5z" />
-      </svg>
-    )
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-200 to-green-300 p-4 relative">
-      <div className="flex items-center justify-between mb-4">
+      {/* Barra superior */}
+     <div className="flex justify-between items-center bg-green-300 p-2 rounded-xl">
         <input
           type="text"
           placeholder="Buscar"
-          className="w-full max-w-xl px-4 py-2 rounded-full border border-gray-300 focus:outline-none"
+          className="flex-grow rounded-full px-4 py-2 mx-4"
         />
         <div className="flex space-x-4 ml-4 text-black">
-          {icons.home}
-          {icons.comment}
-          {icons.send}
-          {icons.bookmark}
-          <div className="w-6 h-6 bg-black rounded-full" />
+          <HomeIcon className="w-6 h-6 cursor-pointer hover:text-green-700" />
+          <BellIcon className="w-6 h-6 cursor-pointer hover:text-green-700" />
+          <UserIcon className="w-6 h-6 cursor-pointer hover:text-green-700" />
         </div>
       </div>
 
       <div className="flex gap-4">
+        {/* Perfil lateral */}
         <div className="w-1/4 space-y-4">
           <div className="bg-white p-4 rounded-lg shadow">
             <div className="flex items-center justify-between">
@@ -76,6 +49,7 @@ export default function SocialProfileUI() {
           </div>
         </div>
 
+        {/* Publicaciones */}
         <div className="w-2/4 space-y-4">
           <div className="bg-gray-200 p-4 rounded-lg shadow">
             <div className="flex items-center space-x-2">
@@ -100,18 +74,16 @@ export default function SocialProfileUI() {
                 </div>
               </div>
               <p className="mt-2">Texto, texto, texto, texto</p>
-              <div className="flex justify-between mt-2">
-                <div className="flex space-x-2">
-                  {icons.bookmark}
-                  {icons.comment}
-                  {icons.send}
-                </div>
-                {icons.bookmark}
+              <div className="flex space-x-4 mt-2 text-black">
+                <HomeIcon className="w-5 h-5 cursor-pointer hover:text-green-700" />
+                <BellIcon className="w-5 h-5 cursor-pointer hover:text-green-700" />
+                <UserIcon className="w-5 h-5 cursor-pointer hover:text-green-700" />
               </div>
             </div>
           ))}
         </div>
 
+        {/* Sección derecha */}
         <div className="w-1/4 space-y-4">
           <div className="bg-green-200 p-4 rounded-lg shadow">
             <p className="font-bold">Lista de amigos</p>
@@ -137,6 +109,7 @@ export default function SocialProfileUI() {
         </div>
       </div>
 
+      {/* Modal de edición */}
       {isEditing && (
         <div className="absolute top-0 left-0 w-full h-full bg-green-800 bg-opacity-95 flex items-center justify-center z-50">
           <div className="w-2/3 bg-green-800 text-black rounded-lg p-6 relative">
@@ -147,7 +120,9 @@ export default function SocialProfileUI() {
             </div>
             <div className="flex flex-col items-center mb-4">
               <div className="w-32 h-32 bg-gray-300 rounded-full mb-2" />
-              <span className="text-sm underline flex items-center">{icons.pencil}<span className="ml-1">Editar</span></span>
+              <span className="text-sm underline flex items-center">
+                <Pencil className="w-4 h-4 mr-1" /> Editar
+              </span>
             </div>
             <div className="space-y-4">
               <input name="name" value={profile.name} onChange={handleChange} placeholder="Nombre" className="w-full p-2 border rounded" />
@@ -160,4 +135,5 @@ export default function SocialProfileUI() {
       )}
     </div>
   );
-} 
+}
+
