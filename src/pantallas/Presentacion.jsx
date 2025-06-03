@@ -22,9 +22,10 @@ function Presentacion() {
         
           <img src='/images/logopedorro.png' alt='logopedorro' className='w-[384px] h-[384px] object-contain' />
         </div>
-     
+     </div>
   );
 }
 
 export default Presentacion;
+
 
