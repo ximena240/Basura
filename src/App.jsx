@@ -9,9 +9,9 @@ import Guardados from './pantallas/Guardados';
 import EditarPerfil from './pantallas/EditarPerfil';
 import Mapacentro from './pantallas/Mapacentro';
 import Paginaprincipal from './pantallas/PaginaPrincipal';
-import SocialProfileUI from './SocialProfileUI';
-import Pantallainicio from './Pantallainicio';
-import SocialMediaPost from './SocialMediaPost';
+import SocialProfileUI from './pantallas/SocialProfileUI';
+import Pantallainicio from './pantallas/Pantallainicio';
+import SocialMediaPost from './pantallas/SocialMediaPost';
 
 
 function App() {

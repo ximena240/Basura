@@ -14,6 +14,8 @@ import Historias from './Historias';
 import UserProfile from './UserProfile';
 
 
+
+
 function App() {
   return (
     <div className='flex flex-col'>
@@ -30,6 +32,7 @@ function App() {
         <Route path="/Mapacentro" element={<Mapacentro />} />
         <Route path="/Paginaprincipal" element={<Paginaprincipal />} />
         <Route path="/UserProfile" element={<UserProfile />} />
+        
       </Routes>
     </div>
   )
