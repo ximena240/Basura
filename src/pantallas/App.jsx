@@ -4,7 +4,6 @@ import Login from './pantallas/Login';
 import Registro from './pantallas/Registro';
 import Cambiocontraseña from './pantallas/Cambiocontraseña';
 import Presentacion from './pantallas/Presentacion';
-import Perfil from './pantallas/Perfil';
 import ImagePost from './pantallas/ImagePost';
 import Guardados from './pantallas/Guardados';
 import EditarPerfil from './EditarPerfil';
@@ -22,8 +21,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
         <Route path="/Cambiocontraseña" element={<Cambiocontraseña />} />
-        <Route path="/Presentacion" element={<Presentacion />} />
-        <Route path="/Perfil" element={<Perfil />} />
+        <Route path="/Presentacion" element={<Presentacion />} />   
         <Route path="/ImagePost" element={<ImagePost/>}/>
         <Route path="/Guardados" element={<Guardados/>}/>
         <Route path="/EditarPerfil" element={<EditarPerfil/>}/> 

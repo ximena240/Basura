@@ -28,4 +28,4 @@ function Cambiocontraseña() {
   );
 }
 
-export default Cambiocontraseña;
+export default Cambiocontraseña; 

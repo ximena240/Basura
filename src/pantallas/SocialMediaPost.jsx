@@ -156,4 +156,4 @@ const SocialMediaPost = () => {
   );
 };
 
-export default SocialMediaPost;
+export default SocialMediaPost; 

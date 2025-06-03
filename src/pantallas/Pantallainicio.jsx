@@ -7,7 +7,7 @@ import {
     Send,
     FlagIcon,
     BookmarkIcon,
-    CameraIcon,
+    CameraIcon, 
 } from 'lucide-react';
 
 function Pantallainicio() {
