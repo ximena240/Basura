@@ -1,16 +1,16 @@
 
 import { Router, Routes, Route } from 'react-router-dom';
-import Login from '../src/pantallas/Login';
-import Registro from '../src/pantallas/Registro';
-import Cambiocontraseña from '../src/pantallas/Cambiocontraseña';
-import Presentacion from '../src/pantallas/Presentacion';
+import Login from '../../src/pantallas/Login';
+import Registro from '../../src/pantallas/Registro';
+import Cambiocontraseña from '../../src/pantallas/Cambiocontraseña';
+import Presentacion from '../../src/pantallas/Presentacion';
 import Guardados from '../src/pantallas/Guardados';
-import EditarPerfil from '../src/pantallas/EditarPerfil';
-import Mapacentro from '../src/pantallas/Mapacentro';
-import Paginaprincipal from '../src/pantallas/PaginaPrincipal';
-import SocialProfileUI from '../src/pantallas/SocialProfileUI';
+import EditarPerfil from '../../src/pantallas/EditarPerfil';
+import Mapacentro from '../../src/pantallas/Mapacentro';
+import Paginaprincipal from '../../src/pantallas/PaginaPrincipal';
+import SocialProfileUI from '../../src/pantallas/SocialProfileUI';
 import Pantallainicio from './pantallas/Pantallainicio';
-import SocialMediaPost from '../src/pantallas/SocialMediaPost';
+import SocialMediaPost from '../../src/pantallas/SocialMediaPost';
 
 
 function App() {
