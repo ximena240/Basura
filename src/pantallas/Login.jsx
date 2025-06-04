@@ -1,65 +1,86 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Importamos useNavigate para la navegación
 
-function Login() {
-  const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
-  const [error, setError] = useState(''); // Estado para el error
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate(); // Inicializamos useNavigate
 
-  const handleLogin = () => {
-    if (password !== 'password123') {
-      setError('Contraseña incorrecta, intenta de nuevo.');
-    } else {
-      setError(''); 
-      console.log('Inicio de sesión exitoso');
-      
+  // Función para manejar el inicio de sesión
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("https://r-production-44c4.up.railway.app/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await response.json();
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        navigate("/PaginaPrincipal"); // Redirige a la pantalla principal después de iniciar sesión
+      } else {
+        alert("Credenciales incorrectas");
+      }
+    } catch (error) {
+      console.error("Error al iniciar sesión:", error);
     }
   };
 
+  // Función para redirigir a la pantalla CambioContraseña.jsx
+  const handleForgotPassword = () => {
+    navigate("/CambioContraseña");
+  };
+
   return (
-    <div className="flex items-center justify-center h-screen bg-gradient-to-t from-[#4D774E] to-50% to-[#81AB77] font-sans">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-3xl font-black mb-2 text-center text-gray-800">Iniciar sesión</h2>
-        <div className="mb-4">
-          <input
-            className="w-full bg-[#4D774E] text-white rounded-2xl shadow-lg p-2 mt-4"
-            id="username"
-            type="text"
-            placeholder="Ingresa tu nombre de usuario o correo"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        <div className="mb-6">
-          <div className="relative">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-200 to-green-400">
+      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center mb-4">Iniciar sesión</h2>
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <label htmlFor="email" className="block text-sm font-semibold text-gray-700">
+              Correo electrónico
+            </label>
             <input
-              className="w-full bg-[#4D774E] text-white rounded-2xl shadow-lg p-2 -mt-2"
-              id="password"
+              type="email"
+              id="email"
+              className="w-full p-2 border rounded bg-gray-100"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="password" className="block text-sm font-semibold text-gray-700">
+              Contraseña
+            </label>
+            <input
               type="password"
-              placeholder="Ingresa tu contraseña"
+              id="password"
+              className="w-full p-2 border rounded bg-gray-100"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
-            <button className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-gray-500 hover:text-gray-700 focus:outline-none">
-              <i className="fi fi-rs-eye"></i>
-            </button>
           </div>
-        </div>
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>} {/* Mostrar el mensaje de error */}
-        <div className="flex items-center justify-between">
           <button
-            className="bg-[#9DC88D] hover:bg-[#164A41] text-white font-bold py-2 px-4 rounded-3xl focus:outline-none focus:shadow-outline"
-            type="button"
-            onClick={handleLogin} 
+            type="submit"
+            className="w-full bg-green-700 text-white py-2 px-4 rounded hover:bg-green-800"
           >
             Iniciar sesión
           </button>
-          <a className="inline-block align-baseline font-stretch-90% text-sm text-[#050505] hover:text-[#164A41]" href="#">
-            ¿Olvidaste tu contraseña?
-          </a>
+        </form>
+        <div className="mt-4 text-center">
+          <button
+            onClick={handleForgotPassword}
+            className="text-sm text-teal-600 hover:underline"
+          >
+            ¿Has olvidado tu contraseña?
+          </button>
         </div>
       </div>
     </div>
   );
 }
-
-export default Login;
