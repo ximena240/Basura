@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
+<<<<<<< HEAD
 import { HomeIcon, BellIcon, UserIcon, Pencil } from 'lucide-react';
+=======
+import { HomeIcon, BellIcon, Pencil, Heart, MessageCircle, Send } from 'lucide-react';
+>>>>>>> origin/main
 
 export default function SocialProfileUI() {
   const [isEditing, setIsEditing] = useState(false);
@@ -17,6 +21,7 @@ export default function SocialProfileUI() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-200 to-green-300 p-4 relative">
+<<<<<<< HEAD
       {/* Barra superior */}
      <div className="flex justify-between items-center bg-green-300 p-2 rounded-xl">
         <input
@@ -28,6 +33,20 @@ export default function SocialProfileUI() {
           <HomeIcon className="w-6 h-6 cursor-pointer hover:text-green-700" />
           <BellIcon className="w-6 h-6 cursor-pointer hover:text-green-700" />
           <UserIcon className="w-6 h-6 cursor-pointer hover:text-green-700" />
+=======
+      {/* Barra superior actualizada */}
+      <div className="flex justify-between items-center bg-green-300 p-2 rounded-xl mb-4">
+        <input
+          type="text"
+          placeholder="Buscar"
+          aria-label="Buscar"
+          className="flex-grow rounded-full px-4 py-2 mx-4"
+        />
+        <div className="flex gap-4 text-black">
+          <HomeIcon className="w-6 h-6 cursor-pointer hover:text-green-700" />
+          <BellIcon className="w-6 h-6 cursor-pointer hover:text-green-700" />
+          <div className="w-6 h-6 rounded-full bg-white border-2 border-gray-400" />
+>>>>>>> origin/main
         </div>
       </div>
 
@@ -37,7 +56,7 @@ export default function SocialProfileUI() {
           <div className="bg-white p-4 rounded-lg shadow">
             <div className="flex items-center justify-between">
               <span className="font-semibold">Nombre</span>
-              <button className="text-sm text-blue-500" onClick={() => setIsEditing(true)}>Editar perfil</button>
+              <button className="text-sm text-green-950" onClick={() => setIsEditing(true)}>Editar perfil</button>
             </div>
             <div className="w-16 h-16 bg-gray-300 rounded-full my-2" />
             <p>{profile.username || 'Nombre del usuario'}</p>
@@ -51,21 +70,31 @@ export default function SocialProfileUI() {
 
         {/* Publicaciones */}
         <div className="w-2/4 space-y-4">
-          <div className="bg-gray-200 p-4 rounded-lg shadow">
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-green-300 rounded-full" />
+          {/* Crear publicación */}
+          <div className="bg-white p-4 rounded-lg shadow flex flex-col space-y-4">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-green-300 rounded-full" />
               <textarea
-                placeholder="Crear una publicación"
-                className="flex-1 bg-transparent text-black focus:outline-none resize-none border rounded p-2"
+                placeholder="¿Qué estás pensando?"
+                className="flex-1 bg-gray-100 rounded-lg p-3 text-black focus:outline-none resize-none"
+                rows={3}
               />
             </div>
-            <div className="flex justify-start mt-2 text-white space-x-4">
-              <span>Foto/video</span>
+
+            <div className="flex items-center justify-between">
+              <button className="bg-green-500 text-white px-4 py-2 rounded-full text-sm hover:bg-green-600">
+                Foto/Video
+              </button>
+
+              <button className="bg-green-700 text-white px-6 py-2 rounded-full text-sm hover:bg-green-800 self-end ml-auto">
+                Publicar
+              </button>
             </div>
           </div>
 
+          {/* Publicaciones existentes */}
           {[1, 2].map((post, index) => (
-            <div key={index} className="bg-gray-200 p-4 rounded-lg shadow">
+            <div key={index} className="bg-white p-4 rounded-lg shadow">
               <div className="flex items-center space-x-2">
                 <div className="w-10 h-10 bg-green-300 rounded-full" />
                 <div>
@@ -75,9 +104,15 @@ export default function SocialProfileUI() {
               </div>
               <p className="mt-2">Texto, texto, texto, texto</p>
               <div className="flex space-x-4 mt-2 text-black">
+<<<<<<< HEAD
                 <HomeIcon className="w-5 h-5 cursor-pointer hover:text-green-700" />
                 <BellIcon className="w-5 h-5 cursor-pointer hover:text-green-700" />
                 <UserIcon className="w-5 h-5 cursor-pointer hover:text-green-700" />
+=======
+                <Heart className="w-5 h-5 cursor-pointer hover:text-green-700" />
+                <MessageCircle className="w-5 h-5 cursor-pointer hover:text-green-700" />
+                <Send className="w-5 h-5 cursor-pointer hover:text-green-700" />
+>>>>>>> origin/main
               </div>
             </div>
           ))}
@@ -85,7 +120,7 @@ export default function SocialProfileUI() {
 
         {/* Sección derecha */}
         <div className="w-1/4 space-y-4">
-          <div className="bg-green-200 p-4 rounded-lg shadow">
+          <div className="bg-white p-4 rounded-lg shadow">
             <p className="font-bold">Lista de amigos</p>
             <p className="text-sm mb-2">100 amigos</p>
             <div className="grid grid-cols-3 gap-2">
@@ -95,7 +130,7 @@ export default function SocialProfileUI() {
             </div>
           </div>
 
-          <div className="bg-green-200 p-4 rounded-lg shadow">
+          <div className="bg-white p-4 rounded-lg shadow">
             <div className="flex justify-between">
               <p className="font-bold">Fotos</p>
               <p className="text-sm">Agregar fotos/video</p>

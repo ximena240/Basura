@@ -11,7 +11,7 @@ const SocialMediaPost = () => {
         {/* Texto de marcador de posición para imagen/video */}
         <span className="text-white text-xl">Imagen/video</span>
       </div>
-
+ 
       {/* Columna derecha (sección verde) */}
       <div className="w-2/5 bg-[#B8E1A3] p-6 flex flex-col justify-between">
         <div>
