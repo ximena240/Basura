@@ -1,5 +1,5 @@
 
-import { Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './Login';
 import Registro from './Registro';
 import Cambiocontraseña from './Cambiocontraseña';
