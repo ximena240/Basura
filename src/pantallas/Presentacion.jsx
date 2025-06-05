@@ -1,12 +1,24 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Presentacion() {
+
+  const navigate = useNavigate();
+
   return (
     <div className='min-h-screen bg-gradient-to-b from-[#4D774E] to-[#164A41] text-white'>
      
       <div className='flex justify-end p-6'>
-        <button className='bg-[#164A41] text-white text-sm font-medium rounded-full px-6 py-2 mr-4 hover:bg-[#588157]'>Crear cuenta</button>
-        <button className='bg-[#164A41] text-white text-sm font-medium rounded-full px-6 py-2 hover:bg-[#588157]'>Iniciar sesión</button>
+        <button
+          onClick={() => navigate('/registro')} // 👈 Al hacer clic lleva a /registro
+          className='bg-[#164A41] text-white text-sm font-medium rounded-full px-6 py-2 mr-4 hover:bg-[#588157]'>
+          Crear cuenta
+        </button>
+        <button
+          onClick={() => navigate('/login')} // 👈 Al hacer clic lleva a /login
+          className='bg-[#164A41] text-white text-sm font-medium rounded-full px-6 py-2 hover:bg-[#588157]'>
+          Iniciar sesión
+        </button>
       </div>
 
       <div className='flex justify-between items-center h-full ml-20 mr-20 relative'>

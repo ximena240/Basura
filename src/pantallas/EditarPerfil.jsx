@@ -1,19 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // 👈 IMPORTANTE
 
-function EditarPerfil() { // Eliminamos isOpen y onClose ya que ahora es una página completa
+function EditarPerfil() {
   const [profilePicture, setProfilePicture] = useState(null);
   const [nombre, setNombre] = useState('Nombre del usuario actual');
   const [nombreUsuario, setNombreUsuario] = useState('usuario_actual');
   const [pronombres, setPronombres] = useState('');
   const [presentacion, setPresentacion] = useState('');
 
-  // El useEffect para controlar el scroll del cuerpo ya no es necesario si no es un modal
-  // pero lo dejamos comentado por si acaso lo quisieras de vuelta para otra cosa.
-  /*
-  useEffect(() => {
-    document.body.style.overflow = 'auto'; // Asegurarse de que el scroll esté habilitado
-  }, []);
-  */
+  const navigate = useNavigate(); // 👈 Hook para navegar
 
   const handleProfilePictureChange = (event) => {
     const file = event.target.files[0];
@@ -30,22 +25,18 @@ function EditarPerfil() { // Eliminamos isOpen y onClose ya que ahora es una pá
     }
 
     console.log('Guardando cambios:', { profilePicture, nombre, nombreUsuario, pronombres, presentacion });
-    // Aquí podrías redirigir a otra página si ya no cierras un modal
-    // Por ejemplo: history.push('/Paginaprincipal'); (si usas useHistory de react-router-dom)
-    alert('Cambios guardados!'); // Solo para demostrar
+    alert('Cambios guardados!');
   };
 
-  // Ya no necesitamos la lógica !isOpen ? return null : ... porque siempre se renderizará
-  
-  return (
-    // Contenedor principal que abarca toda la pantalla y define el layout de dos columnas
-    <div className="flex flex-col md:flex-row min-h-screen bg-green-200"> {/* Fondo verde suave, diseño responsivo */}
-      
-      {/* Columna izquierda: Foto de perfil y acciones */}
-      <div className="w-full md:w-1/3 flex flex-col items-center justify-center p-8 bg-green-300 text-gray-800 shadow-lg"> {/* Fondo un poco más oscuro para la columna izquierda */}
-        <h2 className="text-2xl font-bold mb-6">Tu perfil</h2> {/* Título para la sección de perfil */}
+  const handleCerrar = () => {
+    navigate('/SocialProfileUI'); // 👈 Te lleva a SocialProfileUI
+  };
 
-        <div className="relative w-48 h-48 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden border-4 border-white mb-4 shadow-md"> {/* Foto de perfil más grande */}
+  return (
+    <div className="flex flex-col md:flex-row min-h-screen bg-green-200">
+      <div className="w-full md:w-1/3 flex flex-col items-center justify-center p-8 bg-green-300 text-gray-800 shadow-lg">
+        <h2 className="text-2xl font-bold mb-6">Tu perfil</h2>
+        <div className="relative w-48 h-48 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden border-4 border-white mb-4 shadow-md">
           {profilePicture ? (
             <img src={profilePicture} alt="Foto de perfil" className="w-full h-full object-cover" />
           ) : (
@@ -64,24 +55,26 @@ function EditarPerfil() { // Eliminamos isOpen y onClose ya que ahora es una pá
         <label htmlFor="profile-picture" className="mt-2 text-gray-800 text-lg cursor-pointer hover:underline">
           Cambiar foto de perfil
         </label>
-        {/* Aquí podrías añadir un botón para 'Eliminar foto' si lo deseas */}
-        {/* <button className="mt-2 text-red-600 hover:text-red-800 text-sm">Eliminar foto</button> */}
       </div>
 
-      {/* Columna derecha: Campos del formulario */}
-      <div className="w-full md:w-2/3 p-8 bg-white text-gray-800 shadow-inner overflow-y-auto"> {/* Fondo blanco para los campos, con scroll si el contenido es largo */}
+      <div className="w-full md:w-2/3 p-8 bg-white text-gray-800 shadow-inner overflow-y-auto">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold">Editar información</h2> {/* Título más grande para la sección de edición */}
-          <button 
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300" 
-            onClick={handleGuardarCambios}
-          >
-            Guardar cambios
-          </button>
+          <h2 className="text-3xl font-bold">Editar información</h2>
+          <div className="flex gap-4">
+            <button
+              className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300"
+              onClick={handleGuardarCambios}>
+              Guardar cambios
+            </button>
+            <button
+              className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300"
+              onClick={handleCerrar}>
+              Cerrar
+            </button>
+          </div>
         </div>
 
-        <div className="space-y-6"> {/* Más espacio entre los campos */}
-          {/* Nombre */}
+        <div className="space-y-6">
           <div>
             <label htmlFor="nombre" className="block text-gray-700 text-sm font-semibold mb-2">Nombre</label>
             <input
@@ -94,7 +87,6 @@ function EditarPerfil() { // Eliminamos isOpen y onClose ya que ahora es una pá
             />
           </div>
 
-          {/* Nombre de usuario */}
           <div>
             <label htmlFor="nombre-usuario" className="block text-gray-700 text-sm font-semibold mb-2">Nombre de usuario</label>
             <input
@@ -107,7 +99,6 @@ function EditarPerfil() { // Eliminamos isOpen y onClose ya que ahora es una pá
             />
           </div>
 
-          {/* Pronombres */}
           <div>
             <label htmlFor="pronombres" className="block text-gray-700 text-sm font-semibold mb-2">Pronombres</label>
             <input
@@ -119,12 +110,11 @@ function EditarPerfil() { // Eliminamos isOpen y onClose ya que ahora es una pá
             />
           </div>
 
-          {/* Presentación */}
           <div>
             <label htmlFor="presentacion" className="block text-gray-700 text-sm font-semibold mb-2">Presentación</label>
             <textarea
               id="presentacion"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800 text-lg h-32 resize-y" // h-32 para altura inicial, resize-y para permitir redimensionar verticalmente
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800 text-lg h-32 resize-y"
               value={presentacion}
               onChange={(e) => setPresentacion(e.target.value)}
             ></textarea>

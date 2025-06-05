@@ -16,10 +16,10 @@ function App() {
   return (
     <div className='flex flex-col'>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Presentacion />} />
         <Route path="/registro" element={<Registro />} />
         <Route path="/Cambiocontraseña" element={<Cambiocontraseña />} />
-        <Route path="/Presentacion" element={<Presentacion />} />
+        <Route path="/Login" element={<Login />} />
         <Route path="/Guardados" element={<Guardados/>}/>
         <Route path="/EditarPerfil" element={<EditarPerfil />} />
         <Route path="/Mapacentro" element={<Mapacentro />} />
@@ -28,8 +28,6 @@ function App() {
         
         <Route path="/Pantallainicio" element={<Pantallainicio />} />
         <Route path="/SocialMediaPost" element={<SocialMediaPost />} />
-
-        
 
       </Routes>
     </div>
