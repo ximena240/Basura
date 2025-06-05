@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { HomeIcon, BellIcon, Pencil, Heart, MessageCircle, Send } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
+
 
 export default function SocialProfileUI() {
   const [isEditing, setIsEditing] = useState(false);
@@ -15,6 +18,12 @@ export default function SocialProfileUI() {
     setProfile({ ...profile, [name]: value });
   };
 
+  const navigate = useNavigate();
+
+  const irAEditarPerfil = () => {
+    navigate('/editarperfil');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-200 to-green-300 p-4 relative">
       {/* Barra superior actualizada */}
@@ -26,7 +35,11 @@ export default function SocialProfileUI() {
           className="flex-grow rounded-full px-4 py-2 mx-4"
         />
         <div className="flex gap-4 text-black">
-          <HomeIcon className="w-6 h-6 cursor-pointer hover:text-green-700" />
+          <HomeIcon
+            className="w-6 h-6 cursor-pointer hover:text-green-700"
+            onClick={() => navigate('/PaginaPrincipal')}
+          />
+
           <BellIcon className="w-6 h-6 cursor-pointer hover:text-green-700" />
           <div className="w-6 h-6 rounded-full bg-white border-2 border-gray-400" />
         </div>
@@ -38,7 +51,11 @@ export default function SocialProfileUI() {
           <div className="bg-white p-4 rounded-lg shadow">
             <div className="flex items-center justify-between">
               <span className="font-semibold">Nombre</span>
-              <button className="text-sm text-green-950" onClick={() => setIsEditing(true)}>Editar perfil</button>
+                <button
+                  onClick={irAEditarPerfil}
+                  className="mt-4 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg">
+                  Editar perfil
+                </button>
             </div>
             <div className="w-16 h-16 bg-gray-300 rounded-full my-2" />
             <p>{profile.username || 'Nombre del usuario'}</p>
