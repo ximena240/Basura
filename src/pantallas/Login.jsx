@@ -1,23 +1,27 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importamos useNavigate para la navegación
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate(); // Inicializamos useNavigate
+  const navigate = useNavigate();
 
   // Función para manejar el inicio de sesión
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("https://r-production-44c4.up.railway.app/login", {
+      const response = await fetch("https://r-production-44c4.up.railway.app/usuario/acceso", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ 
+            correo: email,
+            contraseña: password }),
       });
+
       const data = await response.json();
+
       if (data.token) {
         localStorage.setItem("token", data.token);
         navigate("/PaginaPrincipal"); // Redirige a la pantalla principal después de iniciar sesión
@@ -27,11 +31,6 @@ export default function Login() {
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
     }
-  };
-
-  // Función para redirigir a la pantalla CambioContraseña.jsx
-  const handleForgotPassword = () => {
-    navigate("/CambioContraseña");
   };
 
   return (
@@ -74,10 +73,10 @@ export default function Login() {
         </form>
         <div className="mt-4 text-center">
           <button
-            onClick={handleForgotPassword}
+            onClick={() => navigate('/registro')}
             className="text-sm text-teal-600 hover:underline"
           >
-            ¿Has olvidado tu contraseña?
+            ¿No tienes una cuenta? Regístrate aquí
           </button>
         </div>
       </div>
