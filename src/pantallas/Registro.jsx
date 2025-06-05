@@ -1,19 +1,26 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function Registro() {
-  const [nombreUsuario, setNombreUsuario] = useState('');
-  const [correo, setCorreo] = useState('');
-  const [contraseña, setContraseña] = useState('');
+function Registro() {
+  const [formData, setFormData] = useState({
+    nombre_usuario: '',
+    correo: '',
+    contraseña: '',
+  });
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
-  // Función para manejar el registro
-  const handleRegistro = async (e) => {
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validar que los campos no estén vacíos
-    if (!nombreUsuario || !correo || !contraseña) {
-      alert('Por favor, completa todos los campos.');
+    if (!formData.nombre_usuario || !formData.correo || !formData.contraseña) {
+      setError('Por favor, completa todos los campos.');
       return;
     }
 
@@ -24,81 +31,85 @@ export default function Registro() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          correo: correo,
-          contraseña: contraseña,
-          nombre_usuario: nombreUsuario,
+          correo: formData.correo,
+          contraseña: formData.contraseña,
+          nombre_usuario: formData.nombre_usuario,
         }),
       });
 
-      const data = await response.json();
-
-      if (data.mensaje === 'Registro exitoso') {
-        alert('Registro exitoso. Redirigiendo...');
-        navigate('/'); // Redirige al login
-      } else {
-        alert(data.mensaje || 'Error al registrar usuario');
+      if (!response.ok) {
+        throw new Error(`Error en la solicitud: ${response.status}`);
       }
-    } catch (error) {
-      console.error('Error en la solicitud:', error);
-      alert('Error al conectarse al servidor');
+
+      const json_retornado = await response.json();
+      console.log("Respuesta del servidor:", json_retornado);
+
+      if (json_retornado.mensaje === 'Registro exitoso') {
+        setSuccess('Registro exitoso. Redirigiendo...');
+        setTimeout(() => navigate('/'), 2000); // Redirige al login después de 2 segundos
+      } else {
+        setError(json_retornado.mensaje || 'Error al registrar usuario');
+      }
+    } catch (err) {
+      setError('Error al conectarse al servidor');
+      console.error("Error en la solicitud:", err);
     }
   };
 
+  const handleNavigateToLogin = () => {
+    navigate('/');
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-200 to-green-400">
-      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-4">Crear una cuenta</h2>
-        <form onSubmit={handleRegistro} className="space-y-4">
-          <div>
-            <label htmlFor="nombreUsuario" className="block text-sm font-semibold text-gray-700">
-              Nombre completo
-            </label>
-            <input
-              type="text"
-              id="nombreUsuario"
-              className="w-full p-2 border rounded bg-gray-100"
-              value={nombreUsuario}
-              onChange={(e) => setNombreUsuario(e.target.value)}
-              required
-            />
+    <div className="flex items-center justify-center h-screen bg-gradient-to-t from-[#4D774E] to-[#164A41] font-sans">
+      <div className="bg-white p-10 rounded-2xl shadow-lg w-[500px] space-y-4">
+        <h2 className="text-3xl font-black text-center text-gray-800">Crear una cuenta</h2>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            className="w-full bg-[#4D774E] text-white rounded-2xl shadow-lg p-3"
+            type="text"
+            name="nombre_usuario"
+            placeholder="Nombre de usuario"
+            value={formData.nombre_usuario}
+            onChange={handleChange}
+          />
+
+          <input
+            className="w-full bg-[#4D774E] text-white rounded-2xl shadow-lg p-3"
+            type="email"
+            name="correo"
+            placeholder="Correo electrónico"
+            value={formData.correo}
+            onChange={handleChange}
+          />
+
+          <input
+            className="w-full bg-[#4D774E] text-white rounded-2xl shadow-lg p-3"
+            type="password"
+            name="contraseña"
+            placeholder="Contraseña"
+            value={formData.contraseña}
+            onChange={handleChange}
+          />
+
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          {success && <p className="text-green-500 text-sm text-center">{success}</p>}
+
+          <div className="flex justify-center">
+            <button
+              className="bg-[#164A41] hover:bg-[#9DC88D] text-white font-bold py-2 px-6 rounded-3xl focus:outline-none"
+              type="submit"
+            >
+              Crear cuenta
+            </button>
           </div>
-          <div>
-            <label htmlFor="correo" className="block text-sm font-semibold text-gray-700">
-              Correo electrónico
-            </label>
-            <input
-              type="email"
-              id="correo"
-              className="w-full p-2 border rounded bg-gray-100"
-              value={correo}
-              onChange={(e) => setCorreo(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="contraseña" className="block text-sm font-semibold text-gray-700">
-              Contraseña
-            </label>
-            <input
-              type="password"
-              id="contraseña"
-              className="w-full p-2 border rounded bg-gray-100"
-              value={contraseña}
-              onChange={(e) => setContraseña(e.target.value)}
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-green-700 text-white py-2 px-4 rounded hover:bg-green-800"
-          >
-            Crear cuenta
-          </button>
         </form>
-        <div className="mt-4 text-center">
+
+        <div className="text-center">
           <button
-            onClick={() => navigate('/')}
-            className="text-sm text-teal-600 hover:underline"
+            className="text-sm text-[#010101] hover:text-[#164A41]"
+            onClick={handleNavigateToLogin}
           >
             ¿Ya tienes una cuenta? Inicia sesión aquí
           </button>
