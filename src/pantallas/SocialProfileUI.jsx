@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { HomeIcon, BellIcon, Pencil, Heart, MessageCircle, Send } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
+
 
 export default function SocialProfileUI() {
   const [isEditing, setIsEditing] = useState(false);
@@ -38,7 +41,9 @@ export default function SocialProfileUI() {
           <div className="bg-white p-4 rounded-lg shadow">
             <div className="flex items-center justify-between">
               <span className="font-semibold">Nombre</span>
-              <button className="text-sm text-green-950" onClick={() => setIsEditing(true)}>Editar perfil</button>
+               <button onClick={() => setIsEditing(true)}>
+                Editar perfil
+              </button>
             </div>
             <div className="w-16 h-16 bg-gray-300 rounded-full my-2" />
             <p>{profile.username || 'Nombre del usuario'}</p>

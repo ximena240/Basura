@@ -21,12 +21,15 @@ function App() {
         <Route path="/Cambiocontraseña" element={<Cambiocontraseña />} />
         <Route path="/Presentacion" element={<Presentacion />} />
         <Route path="/Guardados" element={<Guardados/>}/>
-        <Route path="/EditarPerfil" element={<EditarPerfil/>}/>
+        <Route path="/EditarPerfil" element={<EditarPerfil />} />
         <Route path="/Mapacentro" element={<Mapacentro />} />
         <Route path="/Paginaprincipal" element={<Paginaprincipal />} />
         <Route path="/SocialProfileUI" element={<SocialProfileUI />} />
+        
         <Route path="/Pantallainicio" element={<Pantallainicio />} />
         <Route path="/SocialMediaPost" element={<SocialMediaPost />} />
+
+        
 
       </Routes>
     </div>

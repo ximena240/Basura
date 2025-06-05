@@ -12,6 +12,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"; // Impor
 import "leaflet/dist/leaflet.css"; // Importamos estilos de Leaflet
 import { useNavigate } from "react-router-dom"; // Importamos useNavigate para la navegación
 
+
 export default function HomePage() {
   const [centros, setCentros] = useState([]); // Estado para almacenar los centros de acopio
   const [contenido, setContenido] = useState(""); // Estado para el contenido de la publicación
@@ -108,9 +109,14 @@ export default function HomePage() {
   const handleAbrirMapa = () => {
     navigate("/MapaCentro");
   };
+  const handleClick = (publicacion) => {
+  navigate('/SocialMediaPost', { state: publicacion });
+  };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-200 to-green-400 p-4 space-y-4">
+      {/* Barra superior */}
       {/* Barra superior */}
       <div className="flex justify-between items-center bg-green-300 p-2 rounded-xl">
         <input
@@ -122,7 +128,12 @@ export default function HomePage() {
         <div className="flex gap-4">
           <Home />
           <Bell />
-          <div className="w-6 h-6 rounded-full bg-white border-2 border-gray-400" />
+          <img
+            src="/icon/np0.jpg"
+            alt="Mi perfil"
+            className="w-8 h-8 rounded-full border cursor-pointer hover:scale-105 transition"
+            onClick={() => navigate("/SocialProfileUI")}
+          />
         </div>
       </div>
 
@@ -224,7 +235,8 @@ export default function HomePage() {
             {publicaciones.map((publicacion, index) => (
               <div
                 key={index}
-                className="bg-gray-100 rounded-xl p-4 shadow-md"
+                className="bg-gray-100 rounded-xl p-4 shadow-md cursor-pointer"
+                onClick={() => handleClick(publicacion)}
               >
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-6 h-6 rounded-full bg-green-400" />
