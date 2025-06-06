@@ -26,7 +26,7 @@ export default function HomePage() {
     const fetchCentros = async () => {
       try {
         const response = await fetch(
-          "https://r-production-44c4.up.railway.app/centros_reciclaje/obtener"
+          "https://r-dzwb.onrender.com/centros_reciclaje/obtener"
         );
         const data = await response.json();
         setCentros(data);
@@ -42,7 +42,7 @@ export default function HomePage() {
     const fetchPublicaciones = async () => {
       try {
         const response = await fetch(
-          "https://r-production-44c4.up.railway.app/publicaciones"
+          "https://r-dzwb.onrender.com/publicaciones"
         );
         const data = await response.json();
         setPublicaciones(data);
@@ -58,7 +58,7 @@ export default function HomePage() {
     const fetchRanking = async () => {
       try {
         const response = await fetch(
-          "https://r-production-44c4.up.railway.app/ranking/obtener"
+          "https://r-dzwb.onrender.com/ranking/obtener"
         );
         const data = await response.json();
         setRanking(data);
@@ -83,7 +83,7 @@ export default function HomePage() {
 
     try {
       const response = await fetch(
-        "https://r-production-44c4.up.railway.app/publicaciones",
+        "https://r-dzwb.onrender.com/publicaciones",
         {
           method: "POST",
           headers: {

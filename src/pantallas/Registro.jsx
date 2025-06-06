@@ -18,7 +18,7 @@ export default function Registro() {
     }
 
     try {
-      const response = await fetch('https://r-production-44c4.up.railway.app/usuario/registro', {
+      const response = await fetch('https://r-dzwb.onrender.com/usuario/registro', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
