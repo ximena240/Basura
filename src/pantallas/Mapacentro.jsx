@@ -13,7 +13,7 @@ export default function MapaCentro() {
     const fetchCentros = async () => {
       try {
         const response = await fetch(
-          "https://r-production-44c4.up.railway.app/centros_reciclaje/obtener"
+          "https://r-dzwb.onrender.com/centros_reciclaje/obtener"
         );
         const data = await response.json();
         setCentros(data);

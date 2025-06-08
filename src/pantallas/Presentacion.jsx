@@ -26,7 +26,7 @@ function Presentacion() {
         <div className='flex flex-col justify-center items-start'>
           <h1 className='text-white text-9xl font-extrabold mb-10'>Residuos<br />Red</h1>
           <p className='text-white text-lg font-normal w-96 mb-'>
-            Somos una pagina web enfocada en la concientización de la gestion de residuos que pueden afectar nuestro entorno.
+            Somos una página web enfocada en la concientización de la gestión de residuos que pueden afectar nuestro entorno.
           </p>
         </div>
         <div className='w-[32rem] h-[32rem] rounded-full bg-transparent flex items-center justify-center shadow-lg'>
