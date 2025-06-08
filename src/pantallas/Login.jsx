@@ -1,16 +1,15 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importamos useNavigate para la navegación
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate(); // Inicializamos useNavigate
+  const navigate = useNavigate();
 
-  // Función para manejar el inicio de sesión
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("https://r-production-44c4.up.railway.app/login", {
+      const response = await fetch("https://r-dzwb.onrender.com/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -20,7 +19,7 @@ export default function Login() {
       const data = await response.json();
       if (data.token) {
         localStorage.setItem("token", data.token);
-        navigate("/PaginaPrincipal"); // Redirige a la pantalla principal después de iniciar sesión
+        navigate("/PaginaPrincipal");
       } else {
         alert("Credenciales incorrectas");
       }
@@ -29,13 +28,12 @@ export default function Login() {
     }
   };
 
-  // Función para redirigir a la pantalla CambioContraseña.jsx
   const handleForgotPassword = () => {
     navigate("/CambioContraseña");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-200 to-green-400">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#4D774E] to-[#164A41]">
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-4">Iniciar sesión</h2>
         <form onSubmit={handleLogin} className="space-y-4">
