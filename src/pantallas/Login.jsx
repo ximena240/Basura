@@ -6,7 +6,6 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  // Función para manejar el inicio de sesión
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -24,7 +23,7 @@ export default function Login() {
 
       if (data.token) {
         localStorage.setItem("token", data.token);
-        navigate("/PaginaPrincipal"); // Redirige a la pantalla principal después de iniciar sesión
+        navigate("/PaginaPrincipal");
       } else {
         alert("Credenciales incorrectas");
       }
@@ -33,8 +32,12 @@ export default function Login() {
     }
   };
 
+  const handleForgotPassword = () => {
+    navigate("/CambioContraseña");
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-200 to-green-400">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#4D774E] to-[#164A41]">
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-4">Iniciar sesión</h2>
         <form onSubmit={handleLogin} className="space-y-4">

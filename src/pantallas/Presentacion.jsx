@@ -1,5 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import zuricataLogo from '../assets/zuricata_transparente.png';
+
+
 
 function Presentacion() {
 
@@ -7,7 +10,6 @@ function Presentacion() {
 
   return (
     <div className='min-h-screen bg-gradient-to-b from-[#4D774E] to-[#164A41] text-white'>
-     
       <div className='flex justify-end p-6'>
         <button
           onClick={() => navigate('/registro')} // 👈 Al hacer clic lleva a /registro
@@ -20,19 +22,15 @@ function Presentacion() {
           Iniciar sesión
         </button>
       </div>
-
       <div className='flex justify-between items-center h-full ml-20 mr-20 relative'>
-      
         <div className='flex flex-col justify-center items-start'>
           <h1 className='text-white text-9xl font-extrabold mb-10'>Residuos<br />Red</h1>
           <p className='text-white text-lg font-normal w-96 mb-'>
-            Somos una pagina web enfocada en la concientización de la gestion de residuos que pueden afectar nuestro entorno.
+            Somos una página web enfocada en la concientización de la gestión de residuos que pueden afectar nuestro entorno.
           </p>
         </div>
-
-      
-        <div className='w-96 h-96 rounded-full bg-white flex items-center justify-center shadow-lg'>
-          <img src='/images/logopedorro.png' alt='logopedorro' className='w-64 h-64 object-contain' />
+        <div className='w-[32rem] h-[32rem] rounded-full bg-transparent flex items-center justify-center shadow-lg'>
+          <img src={zuricataLogo} alt="Logo Zuricata" className="w-full h-full object-contain p-2" />
         </div>
       </div>
     </div>

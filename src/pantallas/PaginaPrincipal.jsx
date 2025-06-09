@@ -116,6 +116,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-200 to-green-400 p-4 space-y-4">
+      
       {/* Barra superior */}
       {/* Barra superior */}
       <div className="flex justify-between items-center bg-green-300 p-2 rounded-xl">
