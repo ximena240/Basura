@@ -280,7 +280,7 @@ export default function HomePage() {
                 </p>
                 {publicacion.imageurl && (
                   <img
-                    src={publicacion.imageurl}
+                    src={`https://r-dzwb.onrender.com/uploads/${publicacion.imageurl}`}
                     alt="Publicación"
                     className="w-full h-32 object-cover rounded-xl"
                   />
