@@ -18,7 +18,7 @@ export default function HomePage() {
   const [contenido, setContenido] = useState(""); // Estado para el contenido de la publicación
   const [imageUrl, setImageUrl] = useState(""); // Estado para la URL de la imagen
   const [tipo, setTipo] = useState("educativo"); // Estado para el tipo de publicación
-  const [publicaciones, setPublicaciones] = useState([]); // Estado para almacenar las publicaciones
+  const [publicacionesConUsuarios, setPublicacionesConUsuarios] = useState([]); // Estado para almacenar las publicaciones con usuarios
   const [ranking, setRanking] = useState([]); // Estado para almacenar el ranking de usuarios
   const navigate = useNavigate(); // Inicializamos useNavigate
 
@@ -42,11 +42,35 @@ export default function HomePage() {
   useEffect(() => {
     const fetchPublicaciones = async () => {
       try {
-        const response = await fetch(
-          "https://r-dzwb.onrender.com/publicaciones"
-        );
+        const response = await fetch("https://r-dzwb.onrender.com/publicaciones");
         const data = await response.json();
-        setPublicaciones(data);
+        const lastPublicacionId = localStorage.getItem("last_publicacion_id"); // Obtener el ID de la última publicación
+
+        // Excluir la publicación con el ID guardado
+        const publicacionesFiltradas = data.filter(
+          (publicacion) => publicacion.id !== parseInt(lastPublicacionId, 10)
+        );
+
+        // Fetch user names for each publication
+        const publicacionesConUsuarios = await Promise.all(
+          publicacionesFiltradas.map(async (publicacion) => {
+            try {
+              const userResponse = await fetch(
+                `https://r-dzwb.onrender.com/usuario/${publicacion.usuario_id}`
+              );
+              if (!userResponse.ok) {
+                throw new Error("Error al obtener el usuario");
+              }
+              const userData = await userResponse.json();
+              return { ...publicacion, nombre_usuario: userData.nombre_usuario };
+            } catch (error) {
+              console.error("Error al obtener el usuario:", error);
+              return { ...publicacion, nombre_usuario: "Usuario desconocido" };
+            }
+          })
+        );
+
+        setPublicacionesConUsuarios(publicacionesConUsuarios);
       } catch (error) {
         console.error("Error al obtener las publicaciones:", error);
       }
@@ -119,7 +143,7 @@ export default function HomePage() {
         try {
           const response = await fetch("https://r-dzwb.onrender.com/publicaciones");
           const data = await response.json();
-          setPublicaciones(data);
+          setPublicacionesConUsuarios(data);
         } catch (error) {
           console.error("Error al obtener las publicaciones:", error);
         }
@@ -264,7 +288,7 @@ export default function HomePage() {
 
           {/* Mostrar publicaciones */}
           <div className="space-y-4">
-            {publicaciones.map((publicacion, index) => (
+            {publicacionesConUsuarios.map((publicacion, index) => (
               <div
                 key={index}
                 className="bg-gray-100 rounded-xl p-4 shadow-md cursor-pointer"
@@ -272,7 +296,9 @@ export default function HomePage() {
               >
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-6 h-6 rounded-full bg-green-400" />
-                  <span className="text-sm font-semibold">Usuario</span>
+                  <span className="text-sm font-semibold">
+                    {publicacion.nombre_usuario || "Usuario desconocido"}
+                  </span>
                   <span className="text-xs text-gray-500">Hace un momento</span>
                 </div>
                 <p className="text-sm text-gray-700 mb-2">

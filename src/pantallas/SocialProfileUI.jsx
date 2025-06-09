@@ -14,7 +14,9 @@ export default function SocialProfileUI() {
   const [contenido, setContenido] = useState(""); // Estado para el contenido de la publicación
   const [imageUrl, setImageUrl] = useState(""); // Estado para la URL de la imagen
   const [tipo, setTipo] = useState("educativo"); // Estado para el tipo de publicación
-  const [publicaciones, setPublicaciones] = useState([]); // Estado para almacenar las publicaciones
+  const [publicacionesConUsuarios, setPublicacionesConUsuarios] = useState([]); // Estado para almacenar las publicaciones con usuarios
+  const [lastPublicacion, setLastPublicacion] = useState(null);
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {
     const fetchPublicaciones = async () => {
@@ -22,15 +24,78 @@ export default function SocialProfileUI() {
         const response = await fetch("https://r-dzwb.onrender.com/publicaciones");
         const data = await response.json();
         const userId = localStorage.getItem("user_id"); // Obtener el ID del usuario desde localStorage
+        const lastPublicacionId = localStorage.getItem("last_publicacion_id"); // Obtener el ID de la última publicación
+
         const publicacionesFiltradas = data.filter(
-          (publicacion) => publicacion.usuario_id === parseInt(userId, 10)
+          (publicacion) =>
+            publicacion.usuario_id === parseInt(userId, 10) &&
+            publicacion.id !== parseInt(lastPublicacionId, 10) // Excluir la publicación con el ID guardado
         );
-        setPublicaciones(publicacionesFiltradas);
+
+        // Fetch user names for each publication
+        const publicacionesConUsuarios = await Promise.all(
+          publicacionesFiltradas.map(async (publicacion) => {
+            try {
+              const userResponse = await fetch(
+                `https://r-dzwb.onrender.com/usuario/${publicacion.usuario_id}`
+              );
+              if (!userResponse.ok) {
+                throw new Error("Error al obtener el usuario");
+              }
+              const userData = await userResponse.json();
+              return { ...publicacion, nombre_usuario: userData.nombre_usuario };
+            } catch (error) {
+              console.error("Error al obtener el usuario:", error);
+              return { ...publicacion, nombre_usuario: "Usuario desconocido" };
+            }
+          })
+        );
+
+        setPublicacionesConUsuarios(publicacionesConUsuarios);
       } catch (error) {
         console.error("Error al obtener las publicaciones:", error);
       }
     };
     fetchPublicaciones();
+  }, []);
+
+  useEffect(() => {
+    const fetchLastPublicacion = async () => {
+      const lastPublicacionId = localStorage.getItem("last_publicacion_id");
+      const userId = localStorage.getItem("user_id");
+
+      if (lastPublicacionId) {
+        try {
+          const response = await fetch(
+            `https://r-dzwb.onrender.com/publicaciones/${lastPublicacionId}`
+          );
+          if (!response.ok) {
+            throw new Error("Error al obtener la última publicación");
+          }
+          const data = await response.json();
+          setLastPublicacion(data);
+        } catch (error) {
+          console.error("Error al obtener la última publicación:", error);
+        }
+      }
+
+      if (userId) {
+        try {
+          const userResponse = await fetch(
+            `https://r-dzwb.onrender.com/usuario/${userId}`
+          );
+          if (!userResponse.ok) {
+            throw new Error("Error al obtener el nombre del usuario");
+          }
+          const userData = await userResponse.json();
+          setUserName(userData.nombre_usuario);
+        } catch (error) {
+          console.error("Error al obtener el nombre del usuario:", error);
+        }
+      }
+    };
+
+    fetchLastPublicacion();
   }, []);
 
   const handleCrearPublicacion = async (e) => {
@@ -79,7 +144,27 @@ export default function SocialProfileUI() {
           const publicacionesFiltradas = data.filter(
             (publicacion) => publicacion.usuario_id === parseInt(userId, 10)
           );
-          setPublicaciones(publicacionesFiltradas);
+
+          // Fetch user names for each publication
+          const publicacionesConUsuarios = await Promise.all(
+            publicacionesFiltradas.map(async (publicacion) => {
+              try {
+                const userResponse = await fetch(
+                  `https://r-dzwb.onrender.com/usuario/${publicacion.usuario_id}`
+                );
+                if (!userResponse.ok) {
+                  throw new Error("Error al obtener el usuario");
+                }
+                const userData = await userResponse.json();
+                return { ...publicacion, nombre_usuario: userData.nombre_usuario };
+              } catch (error) {
+                console.error("Error al obtener el usuario:", error);
+                return { ...publicacion, nombre_usuario: "Usuario desconocido" };
+              }
+            })
+          );
+
+          setPublicacionesConUsuarios(publicacionesConUsuarios);
         } catch (error) {
           console.error("Error al obtener las publicaciones:", error);
         }
@@ -131,16 +216,28 @@ export default function SocialProfileUI() {
         <div className="w-1/4 space-y-4">
           <div className="bg-white p-4 rounded-lg shadow">
             <div className="flex items-center justify-between">
-              <span className="font-semibold">Nombre</span>
-                <button
-                  onClick={irAEditarPerfil}
-                  className="mt-4 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg">
-                  Editar perfil
-                </button>
+              <span className="font-semibold">{userName || "Nombre del usuario"}</span>
+              <button
+                onClick={irAEditarPerfil}
+                className="mt-4 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg"
+              >
+                Editar perfil
+              </button>
             </div>
-            <div className="w-16 h-16 bg-gray-300 rounded-full my-2" />
-            <p>{profile.username || 'Nombre del usuario'}</p>
-            <p className="text-sm text-gray-600">{profile.bio || 'Breve descripción (Puede ser opcional)'}</p>
+            <div className="w-16 h-16 bg-gray-300 rounded-full my-2 overflow-hidden">
+              {lastPublicacion?.imageurl ? (
+                <img
+                  src={`https://r-dzwb.onrender.com/uploads/${lastPublicacion.imageurl}`}
+                  alt="Última publicación"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-gray-500 text-sm">Sin imagen</span>
+              )}
+            </div>
+            <p className="text-sm text-gray-600">
+              {lastPublicacion?.contenido || "Sin descripción"}
+            </p>
           </div>
 
           <div className="bg-green-100 p-4 rounded-lg shadow h-64">
@@ -206,7 +303,7 @@ export default function SocialProfileUI() {
 
           {/* Mostrar publicaciones */}
           <div className="space-y-4">
-            {publicaciones.map((publicacion, index) => (
+            {publicacionesConUsuarios.map((publicacion, index) => (
               <div
                 key={index}
                 className="bg-gray-100 rounded-xl p-4 shadow-md cursor-pointer"
@@ -214,7 +311,9 @@ export default function SocialProfileUI() {
               >
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-6 h-6 rounded-full bg-green-400" />
-                  <span className="text-sm font-semibold">Usuario</span>
+                  <span className="text-sm font-semibold">
+                    {publicacion.nombre_usuario || "Usuario desconocido"}
+                  </span>
                   <span className="text-xs text-gray-500">Hace un momento</span>
                 </div>
                 <p className="text-sm text-gray-700 mb-2">
