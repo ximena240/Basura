@@ -34,7 +34,27 @@ export default function SocialMediaPost() {
           throw new Error("Error al obtener los comentarios");
         }
         const data = await response.json();
-        setComentarios(data);
+
+        // Fetch user names for each comment using usuario_id
+        const comentariosConUsuarios = await Promise.all(
+          data.map(async (comentario) => {
+            try {
+              const userResponse = await fetch(
+                `https://r-dzwb.onrender.com/usuario/${comentario.usuario_id}`
+              );
+              if (!userResponse.ok) {
+                throw new Error("Error al obtener el usuario");
+              }
+              const userData = await userResponse.json();
+              return { ...comentario, nombre_usuario: userData.nombre_usuario };
+            } catch (error) {
+              console.error("Error al obtener el usuario:", error);
+              return { ...comentario, nombre_usuario: "Usuario desconocido" };
+            }
+          })
+        );
+
+        setComentarios(comentariosConUsuarios);
       } catch (error) {
         console.error("Error al obtener los comentarios:", error);
       }
@@ -82,7 +102,26 @@ export default function SocialMediaPost() {
             `https://r-dzwb.onrender.com/publicaciones/${publicacionId}/comentarios`
           );
           const data = await response.json();
-          setComentarios(data);
+
+          const comentariosConUsuarios = await Promise.all(
+            data.map(async (comentario) => {
+              try {
+                const userResponse = await fetch(
+                  `https://r-dzwb.onrender.com/usuario/${comentario.usuario_id}`
+                );
+                if (!userResponse.ok) {
+                  throw new Error("Error al obtener el usuario");
+                }
+                const userData = await userResponse.json();
+                return { ...comentario, nombre_usuario: userData.nombre_usuario };
+              } catch (error) {
+                console.error("Error al obtener el usuario:", error);
+                return { ...comentario, nombre_usuario: "Usuario desconocido" };
+              }
+            })
+          );
+
+          setComentarios(comentariosConUsuarios);
         } catch (error) {
           console.error("Error al obtener los comentarios:", error);
         }
