@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom'; // 👈 IMPORTANTE
 
 function EditarPerfil() {
   const [profilePicture, setProfilePicture] = useState(null);
-  const [nombre, setNombre] = useState('Nombre del usuario actual');
+  const [nombre, setNombre] = useState('');
+  const [apellido, setApellido] = useState('');
   const [nombreUsuario, setNombreUsuario] = useState('usuario_actual');
-  const [pronombres, setPronombres] = useState('');
+  const [telefono, setTelefono] = useState('');
+  const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [presentacion, setPresentacion] = useState('');
 
   const navigate = useNavigate(); // 👈 Hook para navegar
@@ -18,14 +20,77 @@ function EditarPerfil() {
     }
   };
 
-  const handleGuardarCambios = () => {
-    if (!nombre || !nombreUsuario) {
-      alert('El nombre y el nombre de usuario son obligatorios.');
+  const handleGuardarCambios = async () => {
+    const userId = localStorage.getItem("user_id"); // Obtener el ID del usuario desde localStorage
+    const token = localStorage.getItem("token"); // Obtener el token desde localStorage
+
+    if (!nombre || !apellido || !telefono || !fechaNacimiento || !userId || !token) {
+      alert('Todos los campos son obligatorios.');
       return;
     }
 
-    console.log('Guardando cambios:', { profilePicture, nombre, nombreUsuario, pronombres, presentacion });
-    alert('Cambios guardados!');
+    const payload = {
+      user_id: parseInt(userId, 10),
+      nombre,
+      apellido,
+      telefono,
+      fecha_nacimiento_str: fechaNacimiento,
+    };
+
+    try {
+      const response = await fetch("https://r-dzwb.onrender.com/datos_personales/new", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al guardar los datos personales.");
+      }
+
+      const data = await response.json();
+      console.log("Datos personales guardados:", data);
+
+      // Crear publicación automáticamente
+      if (presentacion || profilePicture) {
+        const formData = new FormData();
+        formData.append("contenido", presentacion || "Actualización de foto de perfil");
+        formData.append("tipo", "educativo");
+
+        if (profilePicture) {
+          const fileInput = document.querySelector('input[type="file"]');
+          if (fileInput.files[0]) {
+            formData.append("image", fileInput.files[0]);
+          }
+        }
+
+        const publicacionResponse = await fetch("https://r-dzwb.onrender.com/publicaciones", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        });
+
+        if (!publicacionResponse.ok) {
+          throw new Error("Error al crear la publicación.");
+        }
+
+        const publicacionData = await publicacionResponse.json();
+        console.log("Publicación creada:", publicacionData);
+
+        // Guardar el ID de la publicación en localStorage
+        localStorage.setItem("last_publicacion_id", publicacionData.id);
+      }
+
+      alert("Cambios guardados exitosamente.");
+    } catch (error) {
+      console.error("Error al guardar los datos personales o crear la publicación:", error);
+      alert("Error al guardar los cambios.");
+    }
   };
 
   const handleCerrar = () => {
@@ -63,55 +128,69 @@ function EditarPerfil() {
           <div className="flex gap-4">
             <button
               className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300"
-              onClick={handleGuardarCambios}>
+              onClick={handleGuardarCambios}
+            >
               Guardar cambios
             </button>
             <button
               className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300"
-              onClick={handleCerrar}>
+              onClick={handleCerrar}
+            >
               Cerrar
             </button>
           </div>
         </div>
 
         <div className="space-y-6">
+          <div className="flex gap-4">
+            <div className="w-1/2">
+              <label htmlFor="nombre" className="block text-gray-700 text-sm font-semibold mb-2">Nombre</label>
+              <input
+                type="text"
+                id="nombre"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800 text-lg"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                required
+              />
+            </div>
+            <div className="w-1/2">
+              <label htmlFor="apellido" className="block text-gray-700 text-sm font-semibold mb-2">Apellido</label>
+              <input
+                type="text"
+                id="apellido"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800 text-lg"
+                value={apellido}
+                onChange={(e) => setApellido(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+
           <div>
-            <label htmlFor="nombre" className="block text-gray-700 text-sm font-semibold mb-2">Nombre</label>
+            <label htmlFor="telefono" className="block text-gray-700 text-sm font-semibold mb-2">Teléfono</label>
             <input
-              type="text"
-              id="nombre"
+              type="tel"
+              id="telefono"
               className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800 text-lg"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              required
+              value={telefono}
+              onChange={(e) => setTelefono(e.target.value)}
             />
           </div>
 
           <div>
-            <label htmlFor="nombre-usuario" className="block text-gray-700 text-sm font-semibold mb-2">Nombre de usuario</label>
+            <label htmlFor="fecha-nacimiento" className="block text-gray-700 text-sm font-semibold mb-2">Fecha de nacimiento</label>
             <input
-              type="text"
-              id="nombre-usuario"
+              type="date"
+              id="fecha-nacimiento"
               className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800 text-lg"
-              value={nombreUsuario}
-              onChange={(e) => setNombreUsuario(e.target.value)}
-              required
+              value={fechaNacimiento}
+              onChange={(e) => setFechaNacimiento(e.target.value)}
             />
           </div>
 
           <div>
-            <label htmlFor="pronombres" className="block text-gray-700 text-sm font-semibold mb-2">Pronombres</label>
-            <input
-              type="text"
-              id="pronombres"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800 text-lg"
-              value={pronombres}
-              onChange={(e) => setPronombres(e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label htmlFor="presentacion" className="block text-gray-700 text-sm font-semibold mb-2">Presentación</label>
+            <label htmlFor="presentacion" className="block text-gray-700 text-sm font-semibold mb-2">Descripción</label>
             <textarea
               id="presentacion"
               className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800 text-lg h-32 resize-y"

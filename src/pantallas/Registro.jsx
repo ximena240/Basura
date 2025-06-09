@@ -24,6 +24,27 @@ function Registro() {
       return;
     }
 
+    // Validar que el correo tenga una terminación válida
+    const validDomains = [
+      "@gmail.com",
+      "@hotmail.com",
+      "@outlook.com",
+      "@outlook.es",
+      "@yahoo.com",
+      "@yahoo.es",
+      "@itsmante.edu.mx",
+    ];
+    const isValidEmail = validDomains.some((domain) =>
+      formData.correo.endsWith(domain)
+    );
+
+    if (!isValidEmail) {
+      setError(
+        "El correo no valido"
+      );
+      return;
+    }
+
     try {
       const response = await fetch('https://r-dzwb.onrender.com/usuario/registro', {
         method: 'POST',
