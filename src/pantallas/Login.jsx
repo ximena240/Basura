@@ -23,6 +23,9 @@ export default function Login() {
 
       if (data.token) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("user_id", data.usuario.id);
+        localStorage.setItem("user_email", data.usuario.correo);
+        localStorage.setItem("user_name", data.usuario.nombre_usuario);
         navigate("/PaginaPrincipal");
       } else {
         alert("Credenciales incorrectas");
