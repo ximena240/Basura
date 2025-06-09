@@ -9,14 +9,18 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("https://r-dzwb.onrender.com/login", {
+      const response = await fetch("https://r-dzwb.onrender.com/usuario/acceso", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ 
+            correo: email,
+            contraseña: password }),
       });
+
       const data = await response.json();
+
       if (data.token) {
         localStorage.setItem("token", data.token);
         navigate("/PaginaPrincipal");
@@ -72,10 +76,10 @@ export default function Login() {
         </form>
         <div className="mt-4 text-center">
           <button
-            onClick={handleForgotPassword}
+            onClick={() => navigate('/registro')}
             className="text-sm text-teal-600 hover:underline"
           >
-            ¿Has olvidado tu contraseña?
+            ¿No tienes una cuenta? Regístrate aquí
           </button>
         </div>
       </div>
