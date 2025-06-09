@@ -118,3 +118,4 @@ function Registro() {
     </div>
   );
 }
+export default Registro;
