@@ -73,33 +73,58 @@ export default function HomePage() {
   // Función para manejar el envío de la publicación
   const handleCrearPublicacion = async (e) => {
     e.preventDefault();
-    const payload = {
-      contenido,
-      tipo,
-      imageurl: imageUrl,
-    };
 
     // Recuperar el token del almacenamiento local
     const token = localStorage.getItem("token");
 
+    // Crear un objeto FormData
+    const formData = new FormData();
+    formData.append("contenido", contenido);
+    formData.append("tipo", tipo);
+
+    // Adjuntar archivo si existe
+    const fileInput = document.querySelector('input[type="file"]');
+    if (fileInput.files[0]) {
+      formData.append("image", fileInput.files[0]);
+    } else {
+      console.error("No se seleccionó una imagen.");
+      return;
+    }
+
     try {
-      const response = await fetch(
-        "https://r-dzwb.onrender.com/publicaciones",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`, // Enviar el token en el encabezado
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const response = await fetch("https://r-dzwb.onrender.com/publicaciones", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // NO pongas 'Content-Type', fetch lo gestiona con FormData
+        },
+        body: formData,
+      });
+
       const data = await response.json();
+      if (!response.ok) {
+        console.error("Error del servidor:", data);
+        return;
+      }
+
       console.log("Publicación creada:", data);
+
       // Limpiar los campos del formulario después de enviar
       setContenido("");
-      setImageUrl("");
+      setImageUrl(""); // Opcional si sigues usándolo para mostrar una preview
       setTipo("educativo");
+
+      // Refrescar publicaciones
+      const fetchPublicaciones = async () => {
+        try {
+          const response = await fetch("https://r-dzwb.onrender.com/publicaciones");
+          const data = await response.json();
+          setPublicaciones(data);
+        } catch (error) {
+          console.error("Error al obtener las publicaciones:", error);
+        }
+      };
+      fetchPublicaciones();
     } catch (error) {
       console.error("Error al crear la publicación:", error);
     }
@@ -210,13 +235,19 @@ export default function HomePage() {
               </div>
               <div className="flex flex-col space-y-2">
                 <label className="text-sm font-semibold text-gray-700">
-                  URL de la imagen:
+                  Imagen:
                 </label>
                 <input
-                  type="text"
-                  placeholder="https://example.com/image.jpg"
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = () => setImageUrl(reader.result);
+                      reader.readAsDataURL(file);
+                    }
+                  }}
                   className="w-full p-2 border rounded bg-gray-100"
                 />
               </div>
