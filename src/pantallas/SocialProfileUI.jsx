@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { HomeIcon, BellIcon, Pencil, Heart, MessageCircle, Send } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
-
 
 export default function SocialProfileUI() {
   const [isEditing, setIsEditing] = useState(false);
@@ -13,6 +11,85 @@ export default function SocialProfileUI() {
     bio: ''
   });
 
+  const [contenido, setContenido] = useState(""); // Estado para el contenido de la publicación
+  const [imageUrl, setImageUrl] = useState(""); // Estado para la URL de la imagen
+  const [tipo, setTipo] = useState("educativo"); // Estado para el tipo de publicación
+  const [publicaciones, setPublicaciones] = useState([]); // Estado para almacenar las publicaciones
+
+  useEffect(() => {
+    const fetchPublicaciones = async () => {
+      try {
+        const response = await fetch("https://r-dzwb.onrender.com/publicaciones");
+        const data = await response.json();
+        const userId = localStorage.getItem("user_id"); // Obtener el ID del usuario desde localStorage
+        const publicacionesFiltradas = data.filter(
+          (publicacion) => publicacion.usuario_id === parseInt(userId, 10)
+        );
+        setPublicaciones(publicacionesFiltradas);
+      } catch (error) {
+        console.error("Error al obtener las publicaciones:", error);
+      }
+    };
+    fetchPublicaciones();
+  }, []);
+
+  const handleCrearPublicacion = async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+
+    const formData = new FormData();
+    formData.append("contenido", contenido);
+    formData.append("tipo", tipo);
+
+    const fileInput = document.querySelector('input[type="file"]');
+    if (fileInput.files[0]) {
+      formData.append("image", fileInput.files[0]);
+    } else {
+      console.error("No se seleccionó una imagen.");
+      return;
+    }
+
+    try {
+      const response = await fetch("https://r-dzwb.onrender.com/publicaciones", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        console.error("Error del servidor:", data);
+        return;
+      }
+
+      console.log("Publicación creada:", data);
+
+      setContenido("");
+      setImageUrl("");
+      setTipo("educativo");
+
+      const fetchPublicaciones = async () => {
+        try {
+          const response = await fetch("https://r-dzwb.onrender.com/publicaciones");
+          const data = await response.json();
+          const userId = localStorage.getItem("user_id"); // Obtener el ID del usuario desde localStorage
+          const publicacionesFiltradas = data.filter(
+            (publicacion) => publicacion.usuario_id === parseInt(userId, 10)
+          );
+          setPublicaciones(publicacionesFiltradas);
+        } catch (error) {
+          console.error("Error al obtener las publicaciones:", error);
+        }
+      };
+      fetchPublicaciones();
+    } catch (error) {
+      console.error("Error al crear la publicación:", error);
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProfile({ ...profile, [name]: value });
@@ -22,6 +99,10 @@ export default function SocialProfileUI() {
 
   const irAEditarPerfil = () => {
     navigate('/editarperfil');
+  };
+
+  const handleClick = (publicacion) => {
+    navigate('/SocialMediaPost', { state: publicacion });
   };
 
   return (
@@ -71,44 +152,91 @@ export default function SocialProfileUI() {
         <div className="w-2/4 space-y-4">
           {/* Crear publicación */}
           <div className="bg-white p-4 rounded-lg shadow flex flex-col space-y-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-green-300 rounded-full" />
-              <textarea
-                placeholder="¿Qué estás pensando?"
-                className="flex-1 bg-gray-100 rounded-lg p-3 text-black focus:outline-none resize-none"
-                rows={3}
-              />
-            </div>
-
-            <div className="flex items-center justify-between">
-              <button className="bg-green-500 text-white px-4 py-2 rounded-full text-sm hover:bg-green-600">
-                Foto/Video
-              </button>
-
-              <button className="bg-green-700 text-white px-6 py-2 rounded-full text-sm hover:bg-green-800 self-end ml-auto">
-                Publicar
-              </button>
-            </div>
+            <form onSubmit={handleCrearPublicacion} className="space-y-4">
+              <div className="flex flex-col space-y-3">
+                <textarea
+                  placeholder="¿Qué estás pensando?"
+                  value={contenido}
+                  onChange={(e) => setContenido(e.target.value)}
+                  className="flex-1 bg-gray-100 rounded-lg p-3 text-black focus:outline-none resize-none"
+                  rows={3}
+                />
+              </div>
+              <div className="flex flex-col space-y-2">
+                <label className="text-sm font-semibold text-gray-700">
+                  Tipo de publicación:
+                </label>
+                <select
+                  value={tipo}
+                  onChange={(e) => setTipo(e.target.value)}
+                  className="w-full p-2 border rounded bg-gray-100"
+                >
+                  <option value="educativo">Educativo</option>
+                  <option value="queja">Queja</option>
+                </select>
+              </div>
+              <div className="flex flex-col space-y-2">
+                <label className="text-sm font-semibold text-gray-700">
+                  Imagen:
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = () => setImageUrl(reader.result);
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="w-full p-2 border rounded bg-gray-100"
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <button
+                  type="submit"
+                  className="bg-green-700 text-white px-6 py-2 rounded-full text-sm hover:bg-green-800 self-end ml-auto"
+                >
+                  Publicar
+                </button>
+              </div>
+            </form>
           </div>
 
-          {/* Publicaciones existentes */}
-          {[1, 2].map((post, index) => (
-            <div key={index} className="bg-white p-4 rounded-lg shadow">
-              <div className="flex items-center space-x-2">
-                <div className="w-10 h-10 bg-green-300 rounded-full" />
-                <div>
-                  <p className="font-semibold">Usuario</p>
-                  <p className="text-xs">10 min</p>
+          {/* Mostrar publicaciones */}
+          <div className="space-y-4">
+            {publicaciones.map((publicacion, index) => (
+              <div
+                key={index}
+                className="bg-gray-100 rounded-xl p-4 shadow-md cursor-pointer"
+                onClick={() => handleClick(publicacion)}
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-6 h-6 rounded-full bg-green-400" />
+                  <span className="text-sm font-semibold">Usuario</span>
+                  <span className="text-xs text-gray-500">Hace un momento</span>
+                </div>
+                <p className="text-sm text-gray-700 mb-2">
+                  {publicacion.contenido}
+                </p>
+                {publicacion.imageurl && (
+                  <img
+                    src={`https://r-dzwb.onrender.com/uploads/${publicacion.imageurl}`}
+                    alt="Publicación"
+                    className="w-full h-32 object-cover rounded-xl"
+                  />
+                )}
+                <div className="flex justify-between mt-2">
+                  <div className="flex gap-4">
+                    <Heart className="cursor-pointer hover:text-red-500" />
+                    <MessageCircle className="cursor-pointer hover:text-green-700" />
+                    <Send className="cursor-pointer hover:text-blue-500" />
+                  </div>
                 </div>
               </div>
-              <p className="mt-2">Texto, texto, texto, texto</p>
-              <div className="flex space-x-4 mt-2 text-black">
-                <Heart className="w-5 h-5 cursor-pointer hover:text-green-700" />
-                <MessageCircle className="w-5 h-5 cursor-pointer hover:text-green-700" />
-                <Send className="w-5 h-5 cursor-pointer hover:text-green-700" />
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Sección derecha */}
